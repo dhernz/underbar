@@ -224,15 +224,41 @@ _.each = function(collection, iterator) {
 
 
   // Determine whether all of the elements match a truth test.
-  _.every = function(collection, iterator) {
-    // TIP: Try re-using reduce() here.
-  };
+
+_.every = function(collection, iterator) {
+   // TIP: Try re-using reduce() here.
+     return _.reduce(collection, 
+    
+    function(prev, current) {
+      
+      if(iterator != undefined){
+        return prev && !!iterator(current);
+        }
+      
+      else if(!!prev && !! current){
+          return true 
+          }
+      else{
+        return false;
+      }    
+    },true);
+};
+
 
   // Determine whether any of the elements pass a truth test. If no iterator is
   // provided, provide a default one
   _.some = function(collection, iterator) {
-    // TIP: There's a very clever way to re-use every() here.
-  };
+   // TIP: There's a very clever way to re-use every() here.
+   if( iterator == undefined){
+     return !(_.every(collection,function(v){
+       return !_.identity(v);
+     }));  
+   }
+
+   return !(_.every(collection,function(item){
+     return !iterator(item);
+   }));
+ };
 
 
   /**
@@ -253,12 +279,39 @@ _.each = function(collection, iterator) {
   //   }, {
   //     bla: "even more stuff"
   //   }); // obj1 now contains key1, key2, key3 and bla
-  _.extend = function(obj) {
-  };
+_.extend = function(obj) {
+   //console.log( arguments.length );
+   // start at 1 cos 0 is obj.
+   for(var i=1; i< arguments.length; i++){
+     // iterate all the "from" objects
+     // read and copy each objects properties and append them to the second object.
+     var objectToBeCopied = arguments[i];
+     
+     for( var property in objectToBeCopied ){
+       // set the new objects property to the properties found in copy.
+       obj[property] = objectToBeCopied[property];
+
+     }
+   }
+   return obj;
+ };
 
   // Like extend, but doesn't ever overwrite a key that already
   // exists in obj
   _.defaults = function(obj) {
+
+    for(var i=1; i<arguments.length;i++){
+
+      var objectToBeCopied = arguments[i];
+
+      for(var property in objectToBeCopied){
+        if (obj[property] == undefined) {
+          obj[property] = objectToBeCopied[property];
+        }
+      }
+
+    }
+    return obj;
   };
 
 
@@ -302,7 +355,23 @@ _.each = function(collection, iterator) {
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-  };
+
+    var dictn = {} //holds the parameters and results of func execution
+    return function(){
+        
+        var arrValues =  Array.prototype.slice.call(arguments, 0);
+        var hash = arrValues.join('');
+        if(dictn[hash] != undefined){
+          return dictn[hash];
+        }
+        else{
+          var result = func.apply(this,arrValues);
+          dictn[hash] = result;
+          return result;
+        }
+      };
+
+};
 
   // Delays a function for the given number of milliseconds, and then calls
   // it with the arguments supplied.
@@ -311,6 +380,9 @@ _.each = function(collection, iterator) {
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+
+
+    
   };
 
 
