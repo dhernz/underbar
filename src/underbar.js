@@ -380,9 +380,10 @@ _.extend = function(obj) {
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
-
-
-    
+    var arrValues = Array.prototype.slice.call(arguments,2);
+    setTimeout(function(){
+      func.apply(this,arrValues);
+    },wait);
   };
 
 
@@ -397,6 +398,24 @@ _.extend = function(obj) {
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+      
+  var length = arr.length,
+    result = [],
+    noRepeat;
+  for (var i = 0; i < (length); i++) {
+    var random = Math.floor((Math.random()*length));
+      var newPosition = arr[noRepeat];
+      result.push(newPosition);
+      if(result.length !== length){
+        i=0;
+      }
+      else if(result.length === length){
+        break;
+      }
+    }
+      
+  return result;
+    
   };
 
 
